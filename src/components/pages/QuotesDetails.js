@@ -1,15 +1,34 @@
 import { useParams, Route } from "react-router-dom";
 import Comments from "../comments/Comments";
 
+import HighlightedQuote from "../quotes/HighlightedQuote";
+
+const DUMMY_QUOTES = [
+  {
+    id: "q1",
+    author: "Ulises",
+    text: "This is a book about a book",
+  },
+  {
+    id: "q2",
+    author: "Feddie",
+    text:
+      "This is a book about a book that was written aboot another book of a book.",
+  },
+];
+
 const QuoteDetail = () => {
   const params = useParams();
-  console.log(params.quoteId);
+
+  const quote = DUMMY_QUOTES.find((quote) => quote.id === params.quoteId);
+
+  if (!quote) {
+    return <p>No quote found!</p>;
+  }
 
   return (
     <>
-      <h1> Tis detailth of tis quote</h1>
-      <p>{params.quoteId}</p>
-      <p>Share your comments below!</p>
+      <HighlightedQuote text={quote.text} author={quote.author} />
 
       <Route path={`/quotes${params.quoteId}/comments`}>
         <Comments />
@@ -19,7 +38,3 @@ const QuoteDetail = () => {
 };
 
 export default QuoteDetail;
-
-// I need to extract the quote id from the url, log it
-
-// Import the comments component. I have to use a nested route. I have to make it display only when /quotesId/comments is queued

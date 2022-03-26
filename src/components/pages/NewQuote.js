@@ -1,9 +1,11 @@
-const NewQuote = () => {
-return (
-    <h1> 
-        Tis a new quoteth
-    </h1>
-)
-}; 
+import QuoteForm from "../quotes/QuoteForm";
 
-export default NewQuote; 
+const NewQuote = () => {
+
+const addQuoteHandler = (quoteData) => {
+    console.log(quoteData)
+}
+  return <QuoteForm onAddQuote = {addQuoteHandler}/>;
+};
+
+export default NewQuote;
