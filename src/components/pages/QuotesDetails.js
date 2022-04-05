@@ -1,36 +1,44 @@
-// import classes from "*.module.css";
+import { useEffect } from "react";
+
 import { useParams, Route, Link, useRouteMatch } from "react-router-dom";
 import Comments from "../comments/Comments";
-
+import useHttp from "../hooks/use-http";
+import { getSingleQuote } from "../lib/api";
 import HighlightedQuote from "../quotes/HighlightedQuote";
-
-const DUMMY_QUOTES = [
-  {
-    id: "q1",
-    author: "Ulises",
-    text: "This is a book about a book",
-  },
-  {
-    id: "q2",
-    author: "Feddie",
-    text:
-      "This is a book about a book that was written about another book of a book.",
-  },
-];
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const QuoteDetail = () => {
   const match = useRouteMatch();
   const params = useParams();
+  const { quoteId } = params; //Extracted quoteId to target that specific item.
+  const { sendRequest, status, data: loadedQuote, error } = useHttp(
+    getSingleQuote,
+    true
+  );
 
-  const quote = DUMMY_QUOTES.find((quote) => quote.id === params.quoteId);
+  useEffect(() => {
+    sendRequest(quoteId); // Here, only wanted to use the ID so the effect would only use that parameter.
+  }, [sendRequest, quoteId]);
 
-  if (!quote) {
+  if (status === "pending") {
+    return (
+      <div className="centered">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p className="centered">{error}</p>;
+  }
+
+  if (!loadedQuote.text) {
     return <p>No quote found!</p>;
   }
 
   return (
     <>
-      <HighlightedQuote text={quote.text} author={quote.author} />
+      <HighlightedQuote text={loadedQuote.text} author={loadedQuote.author} />
       <Route path={match.path} exact>
         <div className="centered">
           <Link className="btn--flat" to={`${match.url}comments`}>
