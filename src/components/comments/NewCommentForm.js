@@ -9,13 +9,15 @@ const NewCommentForm = (props) => {
   const commentTextRef = useRef();
   const { sendRequest, status, error } = useHttp(addComment);
 
-  const { ondAddedComment } = props;
+  const { onAddedComment } = props;
 
   useEffect(() => {
     if (status === "completed" && !error) {
-      ondAddedComment();
+      onAddedComment(); // This is causing a bug.  I cannot use it as a function cuz it does not exist. I have to trace the props
     }
-  }, [status, error, ondAddedComment]);
+  }, [status, error, onAddedComment]);
+
+
 
   const submitFormHandler = (event) => {
     event.preventDefault();
@@ -25,7 +27,7 @@ const NewCommentForm = (props) => {
     // send comment to server
 
     const enteredText = commentTextRef.current.value;
-    sendRequest({ text: enteredText }, props.quoteId);
+    sendRequest({ commentData: { text: enteredText }, quoteId: props.quoteId });
   };
 
   return (

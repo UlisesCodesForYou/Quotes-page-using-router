@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import classes from "./Comments.module.css";
@@ -23,7 +23,9 @@ const Comments = () => {
     setIsAddingComment(true);
   };
 
-  const onAddedCommentHandler = () => {};
+  const onAddedCommentHandler = useCallback(() => {
+    sendRequest(quoteId);
+  }, [sendRequest, quoteId]);
 
   let comments;
 
@@ -56,7 +58,7 @@ const Comments = () => {
       )}
       {isAddingComment && (
         <NewCommentForm
-          quoteId={params.quoteId}
+          quoteId={quoteId}
           onAddedComment={onAddedCommentHandler}
         />
       )}
