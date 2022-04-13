@@ -4,6 +4,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 
+
 const NewQuote = React.lazy(() => import("./components/pages/NewQuote")); // This is lazy loading.  These files will only be downloaded when they are needed.
 const QuoteDetail = React.lazy(() =>
   import("./components/pages/QuotesDetails")
